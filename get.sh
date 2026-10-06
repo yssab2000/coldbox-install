@@ -90,7 +90,11 @@ if [[ -f "$HOME_DIR/laravel/.env" ]]; then
   die "ColdBox est déjà installé dans $HOME_DIR. Pour mettre à jour : coldbox update <archive>."
 fi
 if [[ -d "$HOME_DIR" && -n "$(ls -A "$HOME_DIR" 2>/dev/null)" ]]; then
-  die "$HOME_DIR existe et n'est pas vide : choisis un autre dossier avec COLDBOX_HOME."
+  if [[ -f "$HOME_DIR/scripts/install-single-tenant.sh" && ! -f "$HOME_DIR/laravel/.env" ]]; then
+    log "Reprise d'une tentative interrompue dans $HOME_DIR (rien n'avait été installé)"
+  else
+    die "$HOME_DIR existe et n'est pas vide : choisis un autre dossier avec COLDBOX_HOME."
+  fi
 fi
 mkdir -p "$HOME_DIR"
 tar -xzf "$WORK/$ASSET_NAME" -C "$HOME_DIR" --strip-components=1

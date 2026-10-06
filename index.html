@@ -146,7 +146,8 @@
       "--email " + q(document.getElementById("email").value.trim()),
       "--host " + q(host),
       "--tls " + tls,
-      "--locale " + document.getElementById("lang").value
+      "--locale " + document.getElementById("lang").value,
+      "--yes"
     ];
     cmd.textContent = parts.join(" \\\n  ");
     out.hidden = false; copied.hidden = true;
