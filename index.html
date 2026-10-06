@@ -129,6 +129,14 @@
     e.preventDefault();
     var host = document.getElementById("host").value.trim().replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
     var tls = document.getElementById("tls").value;
+    if (!/^[A-Za-z0-9]([A-Za-z0-9.:-]*[A-Za-z0-9])?$/.test(host)) {
+      alert("L'adresse du serveur doit être un nom de domaine (ex. froid.entreprise.dz) ou une adresse IP (ex. 192.168.1.50), pas une adresse postale : c'est l'adresse réseau de la machine Linux.");
+      document.getElementById("host").focus(); return;
+    }
+    if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(document.getElementById("key").value.trim())) {
+      alert("La clé d'installation doit commencer par github_pat_ et ne contenir ni espace ni retour à la ligne.");
+      document.getElementById("key").focus(); return;
+    }
     if (tls === "auto") tls = isIp(host) ? "selfsigned" : "letsencrypt";
     if (tls === "letsencrypt" && isIp(host)) { alert("Let's Encrypt exige un nom de domaine, pas une adresse IP. Choisissez « Auto-signé »."); return; }
     var key = document.getElementById("key").value.trim();
