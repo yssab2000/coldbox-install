@@ -12,6 +12,7 @@
 #         --company "Nom du client" --email admin@client.dz --host froid.client.dz --tls letsencrypt
 #
 # Version courte, via la page publique (https://yssab2000.github.io/coldbox-install/ génère la commande) :
+#   sudo apt-get update -qq && sudo apt-get install -y -qq curl ca-certificates   # si curl manque (Debian minimal)
 #   curl -fsSL https://yssab2000.github.io/coldbox-install/get.sh | sudo COLDBOX_KEY=CLE bash -s -- <options>
 #
 # CLE = jeton GitHub « fine-grained » en lecture seule (Contents) sur ce dépôt, donné par l'éditeur.

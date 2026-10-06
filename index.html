@@ -141,7 +141,7 @@
     if (tls === "letsencrypt" && isIp(host)) { alert("Let's Encrypt exige un nom de domaine, pas une adresse IP. Choisissez « Auto-signé »."); return; }
     var key = document.getElementById("key").value.trim();
     var parts = [
-      "curl -fsSL " + BASE + "get.sh | sudo COLDBOX_KEY=" + q(key) + " bash -s --",
+      "sudo apt-get update -qq && sudo apt-get install -y -qq curl ca-certificates && curl -fsSL " + BASE + "get.sh | sudo COLDBOX_KEY=" + q(key) + " bash -s --",
       "--company " + q(document.getElementById("company").value.trim()),
       "--email " + q(document.getElementById("email").value.trim()),
       "--host " + q(host),
