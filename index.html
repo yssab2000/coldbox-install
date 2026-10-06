@@ -108,9 +108,23 @@
       <tr><td><code>coldbox backup</code></td><td>Sauvegarde complète sans arrêt (faite aussi chaque nuit à 02:30, 14 conservées).</td></tr>
       <tr><td><code>coldbox restore &lt;fichier&gt;</code></td><td>Restauration d'une sauvegarde (avec copie de sécurité préalable).</td></tr>
       <tr><td><code>coldbox renew-certs</code></td><td>Renouvelle le certificat du broker MQTT (les boîtiers restent valides).</td></tr>
-      <tr><td><code>coldbox update &lt;archive&gt;</code></td><td>Met à jour ColdBox en conservant les données.</td></tr>
+      <tr><td><code>coldbox update</code></td><td>Met à jour ColdBox vers la dernière version publiée, en conservant les données (détail ci-dessous).</td></tr>
+      <tr><td><code>coldbox set-key</code></td><td>Enregistre une nouvelle clé d'accès si l'ancienne a expiré (rarement utile).</td></tr>
     </table>
     <p style="margin-top:12px"><strong>Important :</strong> copiez régulièrement les sauvegardes (dossier <code>/opt/coldbox/backups</code>) <strong>hors du serveur</strong>. Elles contiennent l'autorité de certification des boîtiers : sans elle, les boîtiers déjà activés ne pourraient plus se connecter après une réinstallation.</p>
+  </section>
+
+  <section class="card">
+    <h2>5. Mettre à jour ColdBox</h2>
+    <p>Les mises à jour ne s'appliquent jamais toutes seules : chaque installation reste sur la version reçue tant qu'on ne lance pas la commande. Les données, les clés, les certificats et la configuration sont conservés, et une sauvegarde est faite avant tout remplacement.</p>
+    <p><strong>Mettre à jour</strong> (sur le serveur, connecté en SSH) :</p>
+    <pre>sudo coldbox update</pre>
+    <p>Aucune clé à saisir : elle a été enregistrée à l'installation. La commande affiche la version installée et la version disponible, télécharge la nouvelle version, vérifie son empreinte, sauvegarde, remplace le code et relance les services (quelques minutes).</p>
+    <p><strong>Savoir s'il existe une nouvelle version</strong>, sans rien modifier :</p>
+    <pre>sudo coldbox update --check</pre>
+    <p><strong>Choisir une version précise</strong>, par exemple pour revenir en arrière :</p>
+    <pre>sudo coldbox update --version v0.1.2</pre>
+    <p>Si la clé d'accès a expiré, la commande le dit et en demande une nouvelle, fournie par l'éditeur ; elle est enregistrée pour les fois suivantes.</p>
   </section>
 
   <footer>ColdBox — installation mono-client. Pour une clé ou une assistance, contactez l'éditeur.</footer>
