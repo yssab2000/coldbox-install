@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installer ColdBox</title>
+<meta name="description" content="Installer ColdBox, la supervision de chambres froides, sur un serveur Linux en une commande.">
+<style>
+  :root {
+    --bg: #f6f8fb; --card: #ffffff; --ink: #14202e; --ink-2: #51606f; --edge: #dbe3ec;
+    --brand: #0a6cc4; --brand-ink: #ffffff; --code-bg: #0f1b2a; --code-ink: #d8e6f5; --warn-bg: #fff6df; --warn-edge: #ecd28a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c141e; --card: #131f2d; --ink: #e6eef7; --ink-2: #9db0c3; --edge: #243447;
+      --brand: #4aa3f0; --brand-ink: #06121f; --code-bg: #070d14; --code-ink: #d8e6f5; --warn-bg: #2a2410; --warn-edge: #5c4d1c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c141e; --card: #131f2d; --ink: #e6eef7; --ink-2: #9db0c3; --edge: #243447;
+    --brand: #4aa3f0; --brand-ink: #06121f; --code-bg: #070d14; --code-ink: #d8e6f5; --warn-bg: #2a2410; --warn-edge: #5c4d1c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.2rem; margin: 0 0 12px; }
+  p { margin: 0 0 12px; }
+  .lead { color: var(--ink-2); margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--edge); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .note { background: var(--warn-bg); border: 1px solid var(--warn-edge); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: .95rem; }
+  ol, ul { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  label { display: block; font-weight: 600; font-size: .9rem; margin: 12px 0 4px; }
+  input, select { width: 100%; padding: 10px 12px; border: 1px solid var(--edge); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; }
+  input:focus-visible, select:focus-visible, button:focus-visible { outline: 3px solid var(--brand); outline-offset: 1px; }
+  .hint { color: var(--ink-2); font-size: .85rem; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  pre { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; padding: 14px 16px; overflow-x: auto; margin: 12px 0; font: .88rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; word-break: break-all; }
+  code { font: .9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 1px 5px; border-radius: 4px; }
+  button { background: var(--brand); color: var(--brand-ink); border: 0; border-radius: 8px; padding: 10px 18px; font: inherit; font-weight: 600; cursor: pointer; }
+  button:hover { filter: brightness(1.08); }
+  .ok { color: #1b8a3a; font-weight: 600; margin-left: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  td, th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--edge); vertical-align: top; }
+  footer { color: var(--ink-2); font-size: .85rem; margin-top: 24px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Installer ColdBox</h1>
+  <p class="lead">Supervision de chambres froides, installée chez vous : une commande sur un serveur Linux neuf.</p>
+
+  <div class="note"><strong>Version 0.1.</strong> Première version de l'installateur. Installez-la d'abord sur une machine de test.
+  Le code est privé : l'installation exige une clé personnelle fournie par l'éditeur.</div>
+
+  <section class="card">
+    <h2>1. Ce qu'il faut</h2>
+    <ul>
+      <li>Une machine <strong>Linux dédiée</strong> : Debian 12/13 ou Ubuntu 22.04/24.04, 2&nbsp;Go de mémoire, 8&nbsp;Go de disque libre, accès à Internet. Le pare-feu de la machine sera réglé par l'installateur (ports 22, 80, 443 et 8883).</li>
+      <li>Une <strong>adresse fixe</strong> pour ce serveur, joignable par les navigateurs et par les boîtiers : un nom de domaine (ex. <code>froid.entreprise.dz</code>) ou une adresse IP locale (ex. <code>192.168.1.50</code>).</li>
+      <li>Une <strong>clé d'installation</strong> (commence par <code>github_pat_</code>), fournie par l'éditeur.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>2. Préparer la commande</h2>
+    <p class="hint">Les informations restent dans votre navigateur : rien n'est envoyé nulle part.</p>
+    <form id="f" autocomplete="off">
+      <div class="grid">
+        <div><label for="company">Nom de l'entreprise</label><input id="company" required placeholder="Froid du Sud"></div>
+        <div><label for="email">E-mail de l'administrateur</label><input id="email" type="email" required placeholder="admin@entreprise.dz"></div>
+        <div><label for="host">Adresse du serveur</label><input id="host" required placeholder="froid.entreprise.dz ou 192.168.1.50">
+          <div class="hint">Sans « http:// » ni « / ».</div></div>
+        <div><label for="tls">Sécurité (HTTPS)</label>
+          <select id="tls">
+            <option value="auto">Automatique (recommandé)</option>
+            <option value="letsencrypt">Let's Encrypt — nom de domaine public</option>
+            <option value="selfsigned">Auto-signé — réseau local</option>
+            <option value="none">Aucune (HTTP) — réseau local de confiance</option>
+          </select>
+          <div class="hint">Automatique : Let's Encrypt pour un nom de domaine, auto-signé pour une adresse IP.</div></div>
+        <div><label for="key">Clé d'installation</label><input id="key" type="password" required placeholder="github_pat_…"></div>
+        <div><label for="lang">Langue</label>
+          <select id="lang"><option value="fr">Français</option><option value="ar">العربية</option><option value="en">English</option></select></div>
+      </div>
+      <p style="margin-top:16px"><button type="submit">Générer la commande</button></p>
+    </form>
+    <div id="out" hidden>
+      <p>Sur la machine neuve, connecté en SSH, collez :</p>
+      <pre id="cmd"></pre>
+      <button id="copy" type="button">Copier</button><span id="copied" class="ok" hidden>Copié</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>3. Pendant l'installation</h2>
+    <p>Comptez plusieurs minutes (téléchargements et préparation). À la fin, l'installateur affiche <strong>l'adresse du site, l'e-mail de l'administrateur et son mot de passe, une seule fois</strong>. Notez-le, puis changez le mot de passe à la première connexion.</p>
+    <p>Avec une adresse IP et le mode auto-signé, le navigateur affichera un avertissement de certificat : c'est normal tant que le certificat n'est pas installé comme certificat de confiance.</p>
+  </section>
+
+  <section class="card">
+    <h2>4. Ensuite : la commande <code>coldbox</code></h2>
+    <table>
+      <tr><td><code>coldbox status</code></td><td>État des services, certificats, disque, dernière sauvegarde.</td></tr>
+      <tr><td><code>coldbox backup</code></td><td>Sauvegarde complète sans arrêt (faite aussi chaque nuit à 02:30, 14 conservées).</td></tr>
+      <tr><td><code>coldbox restore &lt;fichier&gt;</code></td><td>Restauration d'une sauvegarde (avec copie de sécurité préalable).</td></tr>
+      <tr><td><code>coldbox renew-certs</code></td><td>Renouvelle le certificat du broker MQTT (les boîtiers restent valides).</td></tr>
+      <tr><td><code>coldbox update &lt;archive&gt;</code></td><td>Met à jour ColdBox en conservant les données.</td></tr>
+    </table>
+    <p style="margin-top:12px"><strong>Important :</strong> copiez régulièrement les sauvegardes (dossier <code>/opt/coldbox/backups</code>) <strong>hors du serveur</strong>. Elles contiennent l'autorité de certification des boîtiers : sans elle, les boîtiers déjà activés ne pourraient plus se connecter après une réinstallation.</p>
+  </section>
+
+  <footer>ColdBox — installation mono-client. Pour une clé ou une assistance, contactez l'éditeur.</footer>
+</main>
+
+<script>
+(function () {
+  var BASE = /^https?:/.test(location.protocol) ? location.origin + location.pathname.replace(/[^/]*$/, "") : "https://yssab2000.github.io/coldbox-install/";
+  var f = document.getElementById("f"), out = document.getElementById("out"), cmd = document.getElementById("cmd");
+  var copied = document.getElementById("copied");
+
+  // Guillemets simples : la valeur est transmise telle quelle au shell, sans interprétation.
+  function q(v) { return "'" + String(v).replace(/'/g, "'\\''") + "'"; }
+  function isIp(h) { return /^[0-9]+(\.[0-9]+){3}$/.test(h) || h.indexOf(":") !== -1; }
+
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var host = document.getElementById("host").value.trim().replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
+    var tls = document.getElementById("tls").value;
+    if (tls === "auto") tls = isIp(host) ? "selfsigned" : "letsencrypt";
+    if (tls === "letsencrypt" && isIp(host)) { alert("Let's Encrypt exige un nom de domaine, pas une adresse IP. Choisissez « Auto-signé »."); return; }
+    var key = document.getElementById("key").value.trim();
+    var parts = [
+      "curl -fsSL " + BASE + "get.sh | sudo COLDBOX_KEY=" + q(key) + " bash -s --",
+      "--company " + q(document.getElementById("company").value.trim()),
+      "--email " + q(document.getElementById("email").value.trim()),
+      "--host " + q(host),
+      "--tls " + tls,
+      "--locale " + document.getElementById("lang").value
+    ];
+    cmd.textContent = parts.join(" \\\n  ");
+    out.hidden = false; copied.hidden = true;
+    out.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var done = function () { copied.hidden = false; setTimeout(function () { copied.hidden = true; }, 2000); };
+    if (navigator.clipboard) { navigator.clipboard.writeText(cmd.textContent).then(done, function () {}); }
+    else { var r = document.createRange(); r.selectNodeContents(cmd); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand("copy"); done(); } catch (x) {} }
+  });
+})();
+</script>
+</body>
+</html>
