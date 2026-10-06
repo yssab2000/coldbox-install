@@ -99,6 +99,10 @@ fi
 mkdir -p "$HOME_DIR"
 tar -xzf "$WORK/$ASSET_NAME" -C "$HOME_DIR" --strip-components=1
 [[ -f "$HOME_DIR/scripts/install-single-tenant.sh" ]] || die "archive inattendue : installateur introuvable."
+# Mémorise la version et le dépôt (sans la clé) pour « coldbox update ».
+mkdir -p "$HOME_DIR/.installer"; printf '%s' "$TAG" > "$HOME_DIR/.installer/release-tag"; printf '%s' "$REPO" > "$HOME_DIR/.installer/repo"
+# La clé (lecture seule sur ce dépôt) est mémorisée en root pour les mises à jour : le client n'a rien à saisir.
+if [[ -n "$KEY" ]]; then ( umask 077; printf '%s' "$KEY" > "$HOME_DIR/.installer/key" ); fi
 log "ColdBox ${TAG} décompressé dans $HOME_DIR — lancement de l'installateur"
 unset KEY COLDBOX_KEY
 trap - EXIT; rm -rf "$WORK"

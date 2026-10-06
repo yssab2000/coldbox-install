@@ -53,14 +53,14 @@
   <p class="lead">Supervision de chambres froides, installée chez vous : une commande sur un serveur Linux neuf.</p>
 
   <div class="note"><strong>Version 0.1.</strong> Première version de l'installateur. Installez-la d'abord sur une machine de test.
-  Le code est privé : l'installation exige une clé personnelle fournie par l'éditeur.</div>
+  Cette page est un outil de l'éditeur : la commande générée contient la clé d'accès au code (lecture seule).
+  Transmettez-la au client par un canal privé : <strong>il n'a rien d'autre à saisir</strong>.</div>
 
   <section class="card">
     <h2>1. Ce qu'il faut</h2>
     <ul>
       <li>Une machine <strong>Linux dédiée</strong> : Debian 12/13 ou Ubuntu 22.04/24.04, 2&nbsp;Go de mémoire, 8&nbsp;Go de disque libre, accès à Internet. Le pare-feu de la machine sera réglé par l'installateur (ports 22, 80, 443 et 8883).</li>
       <li>Une <strong>adresse fixe</strong> pour ce serveur, joignable par les navigateurs et par les boîtiers : un nom de domaine (ex. <code>froid.entreprise.dz</code>) ou une adresse IP locale (ex. <code>192.168.1.50</code>).</li>
-      <li>Une <strong>clé d'installation</strong> (commence par <code>github_pat_</code>), fournie par l'éditeur.</li>
     </ul>
   </section>
 
@@ -81,14 +81,15 @@
             <option value="none">Aucune (HTTP) — réseau local de confiance</option>
           </select>
           <div class="hint">Automatique : Let's Encrypt pour un nom de domaine, auto-signé pour une adresse IP.</div></div>
-        <div><label for="key">Clé d'installation</label><input id="key" type="password" required placeholder="github_pat_…"></div>
+        <div><label for="key">Clé d'accès (créée par l'éditeur)</label><input id="key" type="password" required placeholder="github_pat_…">
+          <div class="hint">Jeton GitHub en lecture seule sur le dépôt coldbox-saas.</div></div>
         <div><label for="lang">Langue</label>
           <select id="lang"><option value="fr">Français</option><option value="ar">العربية</option><option value="en">English</option></select></div>
       </div>
       <p style="margin-top:16px"><button type="submit">Générer la commande</button></p>
     </form>
     <div id="out" hidden>
-      <p>Sur la machine neuve, connecté en SSH, collez :</p>
+      <p>Donnez cette commande au client (elle contient la clé : canal privé). Sur sa machine neuve, connecté en SSH, il la colle telle quelle :</p>
       <pre id="cmd"></pre>
       <button id="copy" type="button">Copier</button><span id="copied" class="ok" hidden>Copié</span>
     </div>
@@ -134,7 +135,7 @@
       document.getElementById("host").focus(); return;
     }
     if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(document.getElementById("key").value.trim())) {
-      alert("La clé d'installation doit commencer par github_pat_ et ne contenir ni espace ni retour à la ligne.");
+      alert("La clé d'accès doit commencer par github_pat_ et ne contenir ni espace ni retour à la ligne.");
       document.getElementById("key").focus(); return;
     }
     if (tls === "auto") tls = isIp(host) ? "selfsigned" : "letsencrypt";
