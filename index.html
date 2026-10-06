@@ -124,7 +124,9 @@
     <pre>sudo coldbox update --check</pre>
     <p><strong>Choisir une version précise</strong>, par exemple pour revenir en arrière :</p>
     <pre>sudo coldbox update --version v0.1.2</pre>
-    <p>Si la clé d'accès a expiré, la commande le dit et en demande une nouvelle, fournie par l'éditeur ; elle est enregistrée pour les fois suivantes.</p>
+    <p><strong>Si la clé d'accès a expiré</strong> (ou a été remplacée par l'éditeur), la mise à jour affiche « La clé mémorisée est refusée ». Enregistrez la nouvelle clé fournie par l'éditeur, puis relancez la mise à jour :</p>
+    <pre>sudo coldbox set-key</pre>
+    <p>La commande demande la clé (rien ne s'affiche pendant la saisie), la vérifie auprès de GitHub et l'enregistre pour les fois suivantes. Ensuite : <code>sudo coldbox update</code>. L'installation en cours de fonctionnement n'est pas touchée : seule la mise à jour est bloquée tant que la clé est refusée.</p>
   </section>
 
   <footer>ColdBox — installation mono-client. Pour une clé ou une assistance, contactez l'éditeur.</footer>
